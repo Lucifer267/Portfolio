@@ -14,16 +14,19 @@ const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
   return (
-    <main className="min-h-dvh flex flex-col gap-14 relative">
+    <main className="min-h-dvh flex flex-col gap-16 lg:gap-20 relative">
       <section id="hero">
-        <div className="mx-auto w-full max-w-2xl space-y-8">
-          <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
-            <div className="gap-2 flex flex-col order-2 md:order-1">
+        <div className="mx-auto w-full max-w-5xl space-y-8 lg:space-y-12">
+          <div className="gap-2 gap-y-6 flex flex-col lg:flex-row justify-between lg:items-center lg:gap-8">
+            <div className="gap-2 flex flex-col order-2 lg:order-1">
               <BlurFadeText
                 delay={BLUR_FADE_DELAY}
-                className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
+                className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl"
                 yOffset={8}
                 text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
+                animateByCharacter={true}
+                characterDelay={0.05}
+                duration={0.5}
               />
               <BlurFadeText
                 className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
