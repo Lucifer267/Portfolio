@@ -1,98 +1,167 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipArrow,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
+import { cn } from "@/lib/utils"; // Assuming you have the standard shadcn utility
 
 export default function Navbar() {
-  return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-30 px-4 py-4 lg:px-8">
-      <div className="flex justify-end">
-        <div className="z-50 pointer-events-auto relative h-fit p-2 flex flex-col sm:flex-row gap-2 border bg-card/90 backdrop-blur-3xl shadow-[0_0_10px_3px] shadow-primary/5 rounded-xl">
-          {DATA.navbar.map((item) => {
-            const isExternal = item.href.startsWith("http");
-            return (
-              <Tooltip key={item.href}>
-                <TooltipTrigger asChild>
-                  <a
-                    href={item.href}
-                    target={isExternal ? "_blank" : undefined}
-                    rel={isExternal ? "noopener noreferrer" : undefined}
-                  >
-                    <div className="rounded-lg cursor-pointer size-10 bg-background p-2 text-muted-foreground hover:text-foreground hover:bg-muted backdrop-blur-3xl border border-border transition-colors flex items-center justify-center">
-                      <item.icon className="size-5" />
-                    </div>
-                  </a>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  sideOffset={8}
-                  className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]"
-                >
-                  <p>{item.label}</p>
-                  <TooltipArrow className="fill-primary" />
-                </TooltipContent>
-              </Tooltip>
-            );
-          })}
-          <Separator
-            orientation="vertical"
-            className="h-2/3 m-auto w-px bg-border"
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Helper to determine if a link is active
+  const getIsActive = (href: string) => pathname === href;
+
+  const NavItem = ({ 
+    href, 
+    label, 
+    icon: Icon, 
+    isExternal = false 
+  }: { 
+    href: string; 
+    label: string; 
+    icon: any; 
+    isExternal?: boolean 
+  }) => {
+    const isActive = getIsActive(href);
+
+    return (
+      <Link
+        href={href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        onClick={() => setIsMobileOpen(false)}
+        className="relative group flex flex-col items-center gap-1 py-3 w-full transition-all"
+        title={label}
+        aria-current={isActive ? "page" : undefined}
+      >
+        {/* Animated Active Indicator */}
+        {isActive && (
+          <motion.div
+            layoutId="active-pill"
+            className="absolute inset-0 bg-purple-500/10 dark:bg-white/5 border-r-2 border-purple-500"
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
-          {Object.entries(DATA.contact.social)
-            .filter(([_, social]) => social.navbar)
-            .map(([name, social], index) => {
-              const isExternal = social.url.startsWith("http");
-              const IconComponent = social.icon;
-              return (
-                <Tooltip key={`social-${name}-${index}`}>
-                  <TooltipTrigger asChild>
-                    <a
-                      href={social.url}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                    >
-                      <div className="rounded-lg cursor-pointer size-10 bg-background p-2 text-muted-foreground hover:text-foreground hover:bg-muted backdrop-blur-3xl border border-border transition-colors flex items-center justify-center">
-                        <IconComponent className="size-5" />
-                      </div>
-                    </a>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="bottom"
-                    sideOffset={8}
-                    className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]"
-                  >
-                    <p>{name}</p>
-                    <TooltipArrow className="fill-primary" />
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          <Separator
-            orientation="vertical"
-            className="h-2/3 m-auto w-px bg-border"
+        )}
+
+        <div
+          className={cn(
+            "relative z-10 p-3 rounded-xl transition-all duration-300 group-hover:scale-110",
+            isActive
+              ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/40"
+              : "bg-secondary/50 text-muted-foreground group-hover:bg-secondary group-hover:text-foreground"
+          )}
+        >
+          <Icon className="size-5" />
+        </div>
+        
+        <span className={cn(
+          "relative z-10 text-[10px] font-bold uppercase tracking-tighter transition-colors duration-200",
+          isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+        )}>
+          {label}
+        </span>
+      </Link>
+    );
+  };
+
+  const NavContent = (
+    <div className="flex flex-col items-center h-full w-full">
+      {/* Main Navigation */}
+      <div className="flex flex-col gap-2 items-center py-6 w-full">
+        {DATA.navbar.map((item) => (
+          <NavItem 
+            key={item.href} 
+            href={item.href} 
+            label={item.label} 
+            icon={item.icon} 
+            isExternal={item.href.startsWith("http")}
           />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="rounded-lg cursor-pointer size-10 bg-background p-2 text-muted-foreground hover:text-foreground hover:bg-muted backdrop-blur-3xl border border-border transition-colors">
-                <ModeToggle className="size-full cursor-pointer" />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent
-              side="bottom"
-              sideOffset={8}
-              className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]"
-            >
-              <p>Theme</p>
-              <TooltipArrow className="fill-primary" />
-            </TooltipContent>
-          </Tooltip>
+        ))}
+      </div>
+
+      <Separator className="w-10 opacity-50" />
+
+      {/* Social Links */}
+      <div className="flex flex-col gap-2 items-center py-6 w-full">
+        {Object.entries(DATA.contact.social)
+          .filter(([_, social]) => social.navbar)
+          .map(([name, social]) => (
+            <NavItem 
+              key={name} 
+              href={social.url} 
+              label={name} 
+              icon={social.icon} 
+              isExternal 
+            />
+          ))}
+      </div>
+
+      {/* Theme Toggle at Bottom */}
+      <div className="mt-auto flex flex-col items-center gap-4 py-8">
+        <Separator className="w-10 opacity-50" />
+        <div className="hover:scale-110 transition-transform">
+          <ModeToggle />
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside
+        className="hidden md:flex fixed left-0 top-0 h-screen w-24 flex-col items-center z-50 border-r border-border/40 bg-background/60 backdrop-blur-xl transition-all"
+        style={{
+          boxShadow: "1px 0 20px rgba(0,0,0,0.05)"
+        }}
+      >
+        {NavContent}
+      </aside>
+
+      {/* Mobile Header */}
+      <header className="md:hidden fixed top-0 left-0 right-0 z-50 h-16 bg-background/80 backdrop-blur-md border-b border-border/40 px-4 flex items-center justify-between">
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="p-2 rounded-lg hover:bg-secondary transition-colors"
+          aria-label="Toggle menu"
+        >
+          {isMobileOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+        </button>
+        <div className="font-bold tracking-tighter text-xl bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          SB
+        </div>
+        <ModeToggle />
+      </header>
+
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileOpen(false)}
+              className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="md:hidden fixed left-0 top-0 h-full w-72 bg-background z-50 border-r border-border shadow-2xl pt-20"
+            >
+              {NavContent}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

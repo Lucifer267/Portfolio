@@ -65,7 +65,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="dark">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased relative",
+          "min-h-screen bg-background font-sans antialiased flex flex-col",
           geist.variable,
           geistMono.variable
         )}
@@ -83,9 +83,21 @@ export default function RootLayout({
                 }}
               />
             </div>
-            <div className="relative z-10 max-w-7xl mx-auto py-12 pb-24 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
-              {children}
+            
+            <div className="flex flex-1 relative">
+              {/* Desktop sidebar offset */}
+              <div className="hidden md:block w-24 flex-shrink-0" />
+              
+              {/* Main content */}
+              <main className="flex-1 w-full md:w-auto overflow-x-hidden">
+                <div className="md:pt-0 pt-20">
+                  <div className="relative z-10 mx-auto py-12 pb-24 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl">
+                    {children}
+                  </div>
+                </div>
+              </main>
             </div>
+            
             <Navbar />
           </TooltipProvider>
         </ThemeProvider>
