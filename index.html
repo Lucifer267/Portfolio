@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Human Edge — Why AI Won't Replace Your Job</title>
+  <meta name="description" content="A thoughtful examination of what AI genuinely cannot do — and why the future belongs to those who understand the difference." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --ink:        #1c1a18;
+      --ink-light:  #4a4540;
+      --ink-muted:  #8c857c;
+      --paper:      #f5f0e8;
+      --paper-warm: #ede7da;
+      --paper-rule: #d9d0c2;
+      --gold:       #b8965a;
+      --gold-pale:  #e8d9bc;
+      --burgundy:   #6b2737;
+      --serif:      'Playfair Display', Georgia, serif;
+      --sans:       'DM Sans', system-ui, sans-serif;
+      --mono:       'DM Mono', monospace;
+      --measure:    68ch;
+      --wide:       90ch;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; scroll-behavior: smooth; }
+
+    /* ─── BASE ───────────────────────────────────────────────── */
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── PROGRESS BAR ───────────────────────────────────────── */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(245, 240, 232, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--paper-rule);
+    }
+
+    .nav-brand {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-decoration: none;
+    }
+
+    .nav-meta {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 7rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* faint diagonal grain lines */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -55deg,
+          transparent,
+          transparent 60px,
+          rgba(184,150,90,0.04) 60px,
+          rgba(184,150,90,0.04) 61px
+        );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: var(--wide);
+      width: 100%;
+      display: grid;
+      gap: 2rem;
+      position: relative;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s ease forwards;
+    }
+
+    .hero-kicker::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--burgundy);
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      max-width: 22ch;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s ease forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--burgundy);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      max-width: 54ch;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s ease forwards;
+    }
+
+    .hero-byline {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--paper-rule);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s ease forwards;
+    }
+
+    .byline-text {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    .byline-dot {
+      color: var(--gold);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      opacity: 0;
+      animation: fadeUp 1s 1s ease forwards;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 3rem;
+      background: linear-gradient(to bottom, var(--ink-muted), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+
+    /* ─── FEATURED IMAGE CONCEPT ─────────────────────────────── */
+    .image-block {
+      width: 100%;
+      max-width: var(--wide);
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      background: linear-gradient(135deg, #2a2318 0%, #1c1a18 40%, #3d2b1a 70%, #2a1f14 100%);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(184,150,90,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(107,39,55,0.2) 0%, transparent 50%),
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 8px,
+          rgba(255,255,255,0.015) 8px, rgba(255,255,255,0.015) 9px
+        );
+    }
+
+    .image-caption-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .image-caption {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── ARTICLE LAYOUT ─────────────────────────────────────── */
+    article {
+      max-width: var(--wide);
+      margin: 0 auto;
+      padding: 0 2rem 8rem;
+      display: grid;
+      grid-template-columns: 1fr min(var(--measure), 100%) 1fr;
+    }
+
+    article > * {
+      grid-column: 2;
+    }
+
+    article > .full-bleed {
+      grid-column: 1 / -1;
+    }
+
+    /* ─── HEADINGS ───────────────────────────────────────────── */
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-top: 4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--ink-light);
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ─── BODY TEXT ──────────────────────────────────────────── */
+    p {
+      color: var(--ink-light);
+      margin-bottom: 1.4rem;
+      font-size: 1rem;
+    }
+
+    strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ─── SECTION INTRO ──────────────────────────────────────── */
+    .section-intro {
+      font-family: var(--serif);
+      font-size: 1.18rem;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.65;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ─── DIVIDER ────────────────────────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3.5rem 0;
+      color: var(--gold);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--paper-rule);
+    }
+
+    .divider-glyph {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    /* ─── PULL QUOTE ─────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--gold);
+      padding: 1.5rem 2rem;
+      margin: 3rem 0;
+      background: var(--paper-warm);
+      position: relative;
+    }
+
+    .pull-quote::before {
+      content: '\201C';
+      font-family: var(--serif);
+      font-size: 5rem;
+      line-height: 0;
+      color: var(--gold-pale);
+      position: absolute;
+      top: 2.5rem;
+      left: 0.75rem;
+      pointer-events: none;
+    }
+
+    .pull-quote p {
+      font-family: var(--serif);
+      font-size: 1.22rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    .pull-quote cite {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-style: normal;
+    }
+
+    /* ─── HIGHLIGHT STAT ─────────────────────────────────────── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--paper-rule);
+      border: 1px solid var(--paper-rule);
+      margin: 3rem 0;
+    }
+
+    .stat-cell {
+      background: var(--paper);
+      padding: 1.75rem 1.5rem;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--burgundy);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── CALLOUT ────────────────────────────────────────────── */
+    .callout {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2.5rem 3rem;
+      margin: 3.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .callout::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 8rem; height: 8rem;
+      background: radial-gradient(circle, rgba(184,150,90,0.15) 0%, transparent 70%);
+    }
+
+    .callout-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .callout p {
+      color: var(--paper-warm);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* ─── LIST ───────────────────────────────────────────────── */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 1.5rem;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: var(--ink-light);
+      font-size: 1rem;
+    }
+
+    ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-family: var(--serif);
+    }
+
+    /* ─── CASE STUDY BLOCK ───────────────────────────────────── */
+    .case-study {
+      border: 1px solid var(--paper-rule);
+      padding: 2rem 2.25rem;
+      margin: 2.5rem 0;
+      position: relative;
+    }
+
+    .case-study-tag {
+      position: absolute;
+      top: -0.6rem;
+      left: 1.5rem;
+      background: var(--paper);
+      padding: 0 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+    }
+
+    .case-study h3 {
+      font-style: normal;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .case-study p {
+      font-size: 0.95rem;
+    }
+
+    /* ─── TAKEAWAYS ──────────────────────────────────────────── */
+    .takeaways {
+      background: var(--paper-warm);
+      border-top: 2px solid var(--gold);
+      padding: 2.5rem 3rem;
+      margin: 4rem 0 2rem;
+    }
+
+    .takeaways-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .takeaways ul li {
+      font-family: var(--sans);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.9rem;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--paper-rule);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--ink-muted);
+    }
+
+    .footer-meta {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.15); }
+    }
+
+    /* scroll-triggered reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      article { padding: 0 1.25rem 5rem; }
+      .image-block { padding: 0 1.25rem; }
+      .pull-quote { padding: 1.25rem 1.5rem; }
+      .callout { padding: 1.75rem 1.5rem; }
+      .takeaways { padding: 1.75rem 1.5rem; }
+      footer { padding: 2rem 1.25rem; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading progress -->
+  <div id="progress"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a class="nav-brand" href="#">Portfolio &mdash; Essays</a>
+    <span class="nav-meta">March 2025 &nbsp;&bull;&nbsp; 9 min read</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-kicker">Feature Essay</span>
+
+      <h1>The Work That Remains <em>Distinctly Human</em></h1>
+
+      <p class="hero-sub">
+        Artificial intelligence is rewriting the conditions of professional life. But the conversation about replacement
+        has consistently missed the more important question — what does it mean to be indispensable?
+      </p>
+
+      <div class="hero-byline">
+        <div class="byline-text">
+          Analysis <span class="byline-dot">·</span> Technology &amp; Work
+          <br />
+          For Freshers and Working Professionals
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- Featured image -->
+  <div class="image-block reveal">
+    <div class="image-placeholder" aria-label="Featured editorial image — a single desk lamp illuminating handwritten notes beside a dark terminal screen, cinematic grain overlay"></div>
+    <div class="image-caption-wrap">
+      <p class="image-caption">
+        Image concept &mdash; A single desk lamp illuminating handwritten notes beside a dark terminal screen.<br />
+        Recommended: 16:7 editorial photograph, heavy grain, natural shadow, muted amber tones.
+      </p>
+      <p class="image-caption" style="text-align:right;">Photo &mdash; Editorial</p>
+    </div>
+  </div>
+
+  <!-- Article body -->
+  <article>
+
+    <!-- INTRO -->
+    <p class="section-intro reveal">
+      Every generation inherits a fear. For ours, it arrived wearing the face of a chatbot.
+    </p>
+
+    <p class="reveal">
+      The headline has become familiar: AI will eliminate jobs. Millions of roles will vanish. The professional world as we know it is ending. These claims are made with certainty by people who, in many cases, haven't examined the history of automation, the economics of work, or the actual limitations of the systems they're describing.
+    </p>
+
+    <p class="reveal">
+      This essay is not a reassurance. It doesn't argue that AI is harmless or that nothing will change. Change is already happening. But the conclusion most people leap to — replacement — is the wrong frame. And accepting a wrong frame leads to poor decisions: choosing the wrong skills, the wrong mindset, the wrong response to a genuinely significant shift.
+    </p>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- SECTION 1 -->
+    <h2 class="reveal">Automation Has Always Created More Than It Consumed</h2>
+
+    <p class="reveal">
+      The Luddites of early 19th-century England weren't ignorant. They were skilled craftsmen who understood, precisely, what mechanized looms would do to their livelihoods. They were correct about the short-term disruption. What they couldn't see was the long arc — that industrial manufacturing would eventually employ far more people than artisanal weaving ever had.
+    </p>
+
+    <p class="reveal">
+      This pattern has repeated with electricity, computing, and the internet. Each wave destroyed specific job categories. Each wave produced entirely new professions that previous generations couldn't have named. The economist David Autor has spent decades studying this cycle. His research consistently shows that technology automates <strong>tasks</strong>, not <strong>jobs</strong>. The distinction is not semantic.
+    </p>
+
+    <div class="stat-row reveal full-bleed" style="max-width: var(--wide); margin-left: auto; margin-right: auto;">
+      <div class="stat-cell">
+        <div class="stat-number">85%</div>
+        <div class="stat-label">of jobs that will exist in 2030 haven't been invented yet &mdash; Dell Technologies report</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">60%</div>
+        <div class="stat-label">of current jobs exist in occupations that didn't exist 80 years ago &mdash; McKinsey Global Institute</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">2x</div>
+        <div class="stat-label">productivity gains from AI augmentation vs. AI replacement in most knowledge work sectors</div>
+      </div>
+    </div>
+
+    <p class="reveal">
+      A radiologist's job is not "read X-rays." It is to synthesize medical history, imaging data, patient context, and clinical judgment into a recommendation that a human physician and patient can act upon. AI can now read an X-ray with remarkable accuracy. It cannot be accountable. It cannot sit in a difficult conversation with a family. It cannot hold a license — or a conscience.
+    </p>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- SECTION 2 -->
+    <h2 class="reveal">What AI Is, and What It Isn't</h2>
+
+    <p class="section-intro reveal">
+      The models generating text, images, and code are pattern engines. Extraordinarily capable ones.
+    </p>
+
+    <p class="reveal">
+      They are trained on the past — on the accumulated output of human thought, language, and creativity. They can compress and recombine that output with speed and scale that no individual could match. That is genuinely powerful. It is also genuinely bounded.
+    </p>
+
+    <p class="reveal">
+      Large language models don't understand what they produce. They predict what text is likely to follow a given prompt based on statistical relationships in training data. They have no model of the world beyond language. They cannot feel the weight of a decision. They cannot be wrong in the way that leads to learning.
+    </p>
+
+    <div class="pull-quote reveal">
+      <p>
+        The question is never whether a machine can perform a task. The question is whether performing that task is the actual work — or merely a component of it.
+      </p>
+      <cite>Editorial, The Human Edge</cite>
+    </div>
+
+    <p class="reveal">
+      This matters professionally because the roles most vulnerable to AI are those where the task <em>is</em> the job — where there is little judgment, relational complexity, or contextual reasoning required. Roles where people are asked to transform inputs into outputs according to fixed rules. Those roles were already at risk before AI. AI accelerates the timeline.
+    </p>
+
+    <p class="reveal">
+      The roles that remain — and proliferate — are those requiring the application of judgment in novel situations, the management of relationships under pressure, the capacity to hold ambiguity without collapsing it prematurely into a decision.
+    </p>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- SECTION 3 -->
+    <h2 class="reveal">The Skills That Won't Compress</h2>
+
+    <p class="reveal">
+      There is a useful thought experiment: ask what an AI would need to fully replicate a given professional. Not just to perform isolated tasks, but to occupy the role entirely — including its social, ethical, and institutional dimensions.
+    </p>
+
+    <p class="reveal">
+      For most meaningful work, the answer becomes complicated quickly. Here is what consistently remains on the human side of that line:
+    </p>
+
+    <ul class="reveal">
+      <li><strong>Contextual judgment</strong> — knowing when the rules don't apply, when data is misleading, when the smart move is to slow down.</li>
+      <li><strong>Relational trust</strong> — the kind built through history, consistency, and presence. Clients don't retain a model. They retain a person.</li>
+      <li><strong>Ethical responsibility</strong> — the capacity to be accountable. To bear the consequences of a decision. To say "I was wrong."</li>
+      <li><strong>Originality under constraint</strong> — not creativity for its own sake, but the ability to generate genuinely new approaches to genuinely new problems.</li>
+      <li><strong>Narrative and persuasion</strong> — the ability to move people, not just inform them. To make a case, tell a story, build consensus in a room.</li>
+    </ul>
+
+    <p class="reveal">
+      None of these are soft skills in the dismissive sense. They are the hardest skills to develop, to measure, and — crucially — to replicate.
+    </p>
+
+    <div class="callout reveal">
+      <div class="callout-label">A Note for Freshers Entering the Market</div>
+      <p>
+        The anxiety is understandable. You are entering a labour market mid-transformation, without the advantage of established relationships or a track record. The instinct to compete with AI — to be faster, to produce more — is the wrong instinct. Your advantage is not throughput. It is the capacity to develop the contextual judgment, the professional relationships, and the ethical sensibility that experience builds. AI cannot develop those. It can only simulate the outputs of people who have.
+      </p>
+    </div>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- SECTION 4 -->
+    <h2 class="reveal">The Augmentation Imperative</h2>
+
+    <p class="reveal">
+      The most compelling evidence against the replacement thesis isn't philosophical — it's economic. Companies aren't simply firing workers and pointing AI at their desks. The firms extracting the most value from AI are those deploying it as infrastructure beneath human professionals, not as a substitute for them.
+    </p>
+
+    <div class="case-study reveal">
+      <span class="case-study-tag">Case in Point</span>
+      <h3>Law Firms and the Contract Review Question</h3>
+      <p>
+        Major legal practices began deploying AI contract review tools in 2020. Early predictions suggested significant reductions in junior associate headcount. What happened instead: review capacity expanded, deal volume increased, and associates moved from mechanical document parsing to the work they were actually trained for — analysis, strategy, client advising. The firms didn't shrink. Several grew. The nature of junior associate work changed substantially, and those who adapted most quickly moved furthest, fastest.
+      </p>
+    </div>
+
+    <p class="reveal">
+      This pattern — augmentation expanding capacity rather than contracting headcount — has appeared across design studios, marketing teams, software engineering departments, and medical practices. The common thread is not industry. It is intent. Organizations that deployed AI to eliminate cost extracted less value than those that deployed it to multiply capability.
+    </p>
+
+    <div class="pull-quote reveal">
+      <p>
+        You will not be replaced by AI. You may be replaced by someone who uses AI considerably better than you do.
+      </p>
+      <cite>Widely attributed &mdash; origin contested, truth intact</cite>
+    </div>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- SECTION 5 -->
+    <h2 class="reveal">What This Means in Practice</h2>
+
+    <h3 class="reveal">For those beginning their careers</h3>
+
+    <p class="reveal">
+      Resist the urge to specialize early in skills that are essentially procedural — tasks that can be reduced to a reliable sequence of steps. Instead, build the capacity to ask better questions. Seek roles that expose you to messy, ambiguous, high-stakes situations early. Learn to use AI tools fluently, not because they are the job, but because fluency with them frees your attention for the work that matters.
+    </p>
+
+    <h3 class="reveal">For those mid-career</h3>
+
+    <p class="reveal">
+      Your years of accumulated context — industry knowledge, relationships, institutional understanding — are an asset that current AI systems are structurally incapable of possessing. The risk is not obsolescence. It is complacency: assuming that existing expertise is sufficient without updating how it's applied, communicated, and delivered in an AI-augmented environment.
+    </p>
+
+    <p class="reveal">
+      The professionals thriving in this transition are not those most resistant to AI, nor those most uncritically enthusiastic about it. They are those who have maintained a clear understanding of what they uniquely offer — and who deploy AI precisely to spend more time offering it.
+    </p>
+
+    <div class="divider reveal"><span class="divider-glyph">&#9670;</span></div>
+
+    <!-- CONCLUSION -->
+    <h2 class="reveal">The Question Worth Asking</h2>
+
+    <p class="section-intro reveal">
+      The fear of replacement is, at its core, a question about value. About whether what we do matters — and whether it will continue to matter.
+    </p>
+
+    <p class="reveal">
+      That question deserves a serious answer, not a reassuring one. Some work will disappear. Some people will need to do genuinely different things than they do now. This is not unprecedented. It is the condition of every generation that has lived through a significant technological shift.
+    </p>
+
+    <p class="reveal">
+      What is unprecedented is the pace — and the clarity with which we can, if we choose to, understand what is happening. We are not blindly entering this. We can see the forces in motion. We can make deliberate choices about which skills to deepen, which to let go, how to position ourselves in relation to these systems.
+    </p>
+
+    <p class="reveal">
+      The professionals who will matter most in ten years are not those who feared AI or those who naively celebrated it. They are those who understood it clearly, used it precisely, and never confused what it could do with what they were for.
+    </p>
+
+    <!-- TAKEAWAYS -->
+    <div class="takeaways reveal">
+      <div class="takeaways-label">Key Takeaways</div>
+      <ul>
+        <li>AI automates <strong>tasks</strong>, not roles. Most jobs are bundles of tasks — many of which remain resistant to automation by design.</li>
+        <li>The skills least vulnerable to AI — contextual judgment, ethical accountability, relational trust — are also the skills most worth building.</li>
+        <li>Augmentation is the dominant model: AI expands professional capacity rather than replacing it in organizations that deploy it well.</li>
+        <li>For freshers: the advantage is not speed or volume. It is developing the contextual depth that AI can simulate but never possess.</li>
+        <li>For professionals: your accumulated context and relationships are a structural moat. Complacency, not obsolescence, is the actual risk.</li>
+        <li>Those who understand AI clearly — neither fearing nor idealizing it — are best positioned to determine how it gets used, and by whom.</li>
+      </ul>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer>
+    <span class="footer-brand">Portfolio &mdash; Essays on Work &amp; Technology</span>
+    <span class="footer-meta">&copy; 2025 &nbsp;&bull;&nbsp; All rights reserved</span>
+  </footer>
+
+  <script>
+    // Reading progress
+    const bar = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      bar.style.width = pct + '%';
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      }),
+      { threshold: 0.08 }
+    );
+    reveals.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
