@@ -1,10 +1,40 @@
+"use client";
+
 import BlurFade from "@/components/magicui/blur-fade";
 import { ProjectCard } from "@/components/project-card";
 import { DATA } from "@/data/resume";
+import { CaseStudyModal } from "@/components/case-study-modal";
+import { RagMedicalQAContent } from "@/components/case-study-content/rag-medical";
+import { HoneypotThreatContent } from "@/components/case-study-content/honeypot-threat";
+import { AuraAnalyticsContent } from "@/components/case-study-content/aura-analytics";
+import { useState } from "react";
 
 const BLUR_FADE_DELAY = 0.04;
 
+const caseStudies = {
+  "rag-medical-qa": {
+    title: "Hybrid Graph RAG Medical QA System",
+    subtitle: "Building Production-Ready Question Answering at Scale",
+    content: <RagMedicalQAContent />,
+    githubUrl: "https://github.com/Lucifer267/RAG_Medical",
+  },
+  "honeypot-threat-analysis": {
+    title: "Custom Honeypot for Multi-Protocol Threat Analysis",
+    subtitle: "Real-Time Intrusion Detection and Behavioral Analysis",
+    content: <HoneypotThreatContent />,
+    githubUrl: "https://github.com/Lucifer267/TrapHoneyPot",
+  },
+  "aura-analytics": {
+    title: "AURA — Data Visualization & Analytics Platform",
+    subtitle: "Backend Infrastructure for Real-Time Data Processing",
+    content: <AuraAnalyticsContent />,
+    githubUrl: "https://github.com/Lucifer267/AURA",
+  },
+};
+
 export default function ProjectsSection() {
+    const [openCaseStudy, setOpenCaseStudy] = useState<string | null>(null);
+    
     return (
         <section id="projects">
             <div className="flex min-h-0 flex-col gap-y-8">
@@ -32,7 +62,10 @@ export default function ProjectsSection() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto auto-rows-fr">
-                    {DATA.projects.map((project, id) => (
+                    {DATA.projects.map((project, id) => {
+                        // Extract case study ID from href (e.g., "/case-studies/rag-medical-qa" -> "rag-medical-qa")
+                        const caseStudyId = project.href.split("/").pop();
+                        return (
                         <BlurFade
                             key={project.title}
                             delay={BLUR_FADE_DELAY * 12 + id * 0.05}
@@ -48,11 +81,28 @@ export default function ProjectsSection() {
                                 image={project.image}
                                 video={project.video}
                                 links={project.links}
+                                caseStudyId={caseStudyId}
+                                onCaseStudyClick={setOpenCaseStudy}
                             />
                         </BlurFade>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
+
+            {/* Case Study Modal */}
+            {openCaseStudy && caseStudies[openCaseStudy as keyof typeof caseStudies] && (
+                <CaseStudyModal
+                    id={openCaseStudy}
+                    title={caseStudies[openCaseStudy as keyof typeof caseStudies].title}
+                    subtitle={caseStudies[openCaseStudy as keyof typeof caseStudies].subtitle}
+                    isOpen={!!openCaseStudy}
+                    onClose={() => setOpenCaseStudy(null)}
+                    githubUrl={caseStudies[openCaseStudy as keyof typeof caseStudies].githubUrl}
+                >
+                    {caseStudies[openCaseStudy as keyof typeof caseStudies].content}
+                </CaseStudyModal>
+            )}
         </section>
     );
 }

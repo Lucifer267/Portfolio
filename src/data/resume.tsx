@@ -143,7 +143,7 @@ export const DATA: ResumeData = {
   projects: [
     {
       title: "Hybrid Graph RAG Medical QA System",
-      href: "https://github.com/Lucifer267/RAG_Medical",
+      href: "/case-studies/rag-medical-qa",
       dates: "2025",
       active: true,
       description:
@@ -169,7 +169,7 @@ export const DATA: ResumeData = {
     },
     {
       title: "Custom Honeypot for Multi-Protocol Threat Analysis",
-      href: "https://github.com/Lucifer267/TrapHoneyPot",
+      href: "/case-studies/honeypot-threat-analysis",
       dates: "2025",
       active: true,
       description:
@@ -194,7 +194,7 @@ export const DATA: ResumeData = {
     },
     {
       title: "AURA — Data Visualization & Analytics Platform",
-      href: "https://github.com/Lucifer267/AURA",
+      href: "/case-studies/aura-analytics",
       dates: "2025",
       active: true,
       description:

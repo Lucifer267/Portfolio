@@ -40,6 +40,8 @@ interface Props {
     href: string;
   }[];
   className?: string;
+  caseStudyId?: string;
+  onCaseStudyClick?: (caseStudyId: string) => void;
 }
 
 export function ProjectCard({
@@ -53,20 +55,40 @@ export function ProjectCard({
   video,
   links,
   className,
+  caseStudyId,
+  onCaseStudyClick,
 }: Props) {
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (caseStudyId && onCaseStudyClick && e.currentTarget === e.target) {
+      e.preventDefault();
+      onCaseStudyClick(caseStudyId);
+    }
+  };
   return (
     <div
       className={cn(
         "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 cursor-pointer hover:ring-muted transition-all duration-200",
         className
       )}
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && caseStudyId && onCaseStudyClick) {
+          e.preventDefault();
+          onCaseStudyClick(caseStudyId);
+        }
+      }}
     >
       <div className="relative shrink-0">
-        <Link
-          href={href || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
           className="block"
+          onClick={(e) => {
+            if (caseStudyId && onCaseStudyClick) {
+              e.stopPropagation();
+              onCaseStudyClick(caseStudyId);
+            }
+          }}
         >
           {video ? (
             <video
@@ -82,7 +104,7 @@ export function ProjectCard({
           ) : (
             <div className="w-full h-48 bg-muted" />
           )}
-        </Link>
+        </div>
         {links && links.length > 0 && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-2">
             {links.map((link, idx) => (
@@ -111,15 +133,18 @@ export function ProjectCard({
             <h3 className="font-semibold">{title}</h3>
             <time className="text-xs text-muted-foreground">{dates}</time>
           </div>
-          <Link
-            href={href || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={(e) => {
+              if (caseStudyId && onCaseStudyClick) {
+                e.stopPropagation();
+                onCaseStudyClick(caseStudyId);
+              }
+            }}
             className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            aria-label={`Open ${title}`}
+            aria-label={`View details for ${title}`}
           >
             <ArrowUpRight className="h-4 w-4" aria-hidden />
-          </Link>
+          </button>
         </div>
         <div className="text-xs flex-1 prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
           <Markdown>{description}</Markdown>
