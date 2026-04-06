@@ -8,411 +8,299 @@ export const metadata: Metadata = {
 };
 
 export default function AuraCaseStudy() {
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target === e.currentTarget) {
+      window.history.back();
+    }
+  };
+
   return (
-    <main className="min-h-screen bg-background">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-background" onClick={handleBackgroundClick}>
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8" onClick={(e) => e.stopPropagation()}>
         {/* Back Link */}
         <Link
           href="/case-studies"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Case Studies
         </Link>
 
-        {/* Header */}
-        <div className="mb-12">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            2025
+          {/* Header */}
+        <div className="mb-10">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest leading-none">
+            Project — 2025
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            AURA — Data Visualization & Analytics Platform
+          <h1 className="mt-3 text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-slate-900 dark:text-white">
+            AURA
           </h1>
-          <p className="mt-2 text-lg text-muted-foreground">
-            Backend Infrastructure for Real-Time Data Processing
+          <p className="mt-4 text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100 italic opacity-90">
+            Data Visualization & Analytics Platform
+          </p>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed text-slate-700 dark:text-slate-300 font-medium max-w-2xl border-l-4 border-primary pl-4">
+            A high-performance backend analytics engine that transforms raw CSV uploads into automated insights and interactive visualizations.
           </p>
         </div>
 
-        {/* Main Content */}
-        <article className="prose prose-stone dark:prose-invert max-w-none">
-          {/* Problem Statement */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Problem Statement</h2>
-            <p>
-              Non-technical users often have datasets (CSVs, spreadsheets) but lack tools to explore them meaningfully. Excel is cumbersome. Python notebooks require coding knowledge. Expensive BI tools like Tableau are overkill.
-            </p>
-            <p>
-              The challenge: Build a platform where users can upload a CSV, get automatic insights (statistical summaries, outliers, trends), and generate interactive visualizations—all without manual configuration.
-            </p>
-            <p>
-              <strong>Constraints:</strong>
-            </p>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Handle diverse data types (numeric, categorical, temporal, geographic)</li>
-              <li>Process files up to 100MB efficiently without timeout</li>
-              <li>Generate visualizations in real-time (user doesn't wait 30s)</li>
-              <li>Minimal storage footprint (uploads are temporary)</li>
-              <li>Support multiple chart types with smart defaults</li>
-            </ul>
-            <p>
-              The platform needed to be fast, intuitive, and require zero configuration from users.
-            </p>
-          </section>
+        {/* System Architecture Visualization - IMPROVED CONTRAST */}
+        <div className="mb-12 group">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
+            <span className="w-8 h-[1px] bg-slate-300 dark:bg-slate-700"></span>
+            System Architecture
+          </h3>
+          <div className="relative rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-8 shadow-sm overflow-hidden min-h-[400px] flex items-center justify-center">
+            {/* Visual background element */}
+            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+            
+            <div className="relative w-full max-w-lg space-y-6">
+              {/* Step 1 */}
+              <div className="flex flex-col items-center">
+                <div className="px-4 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold text-sm shadow-sm">
+                  User Upload (CSV)
+                </div>
+                <div className="h-6 w-px bg-slate-300 dark:bg-slate-700 my-1"></div>
+              </div>
 
-          {/* Solution Overview */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Solution Overview</h2>
-            <p>
-              AURA is a backend analytics engine that intelligently processes raw data and surfaces insights automatically.
-            </p>
-            <p>
-              <strong>Core flow:</strong>
-            </p>
-            <ol className="list-decimal list-inside space-y-2 ml-2">
-              <li><strong>Upload & Parse:</strong> Accept CSV, validate structure</li>
-              <li><strong>Analyze:</strong> Infer data types, compute statistics, detect outliers</li>
-              <li><strong>Generate Charts:</strong> Based on column types, suggest optimal visualizations</li>
-              <li><strong>Serve:</strong> Return interactive charts to frontend</li>
-            </ol>
-            <p>
-              Instead of asking users, "What would you like to visualize?" the system asks, "What interesting patterns do I see?"—and shows them.
-            </p>
-            <p>
-              <strong>Key Innovation:</strong> Smart batching and caching. If the same dataset is processed twice, results are cached. Related computations (e.g., percentiles for a column) are batched together to reduce redundant operations.
-            </p>
-          </section>
+              {/* Step 2 */}
+              <div className="flex flex-col items-center">
+                <div className="px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold text-sm shadow-sm">
+                  Chunked Reading (for large files)
+                </div>
+                <div className="h-6 w-px bg-slate-300 dark:bg-slate-700 my-1"></div>
+              </div>
 
-          {/* Architecture */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">System Architecture & Workflow</h2>
-            <div className="bg-muted p-6 rounded-lg overflow-x-auto mb-6">
-              <pre className="text-sm text-muted-foreground whitespace-pre-wrap break-words font-mono">
-{`User Upload (CSV)
-    ↓
-Flask Endpoint: /api/upload
-    │
-    ├─ Validation
-    │  └─ Check file size, encoding, headers
-    │
-    ├─ Chunked Reading (for large files)
-    │  └─ Stream into Pandas DataFrame
-    │
-    ├─ Data Analysis Pipeline
-    │  ├─ Detect column types
-    │  ├─ Compute statistics
-    │  │  (mean, median, std, quantiles)
-    │  ├─ Identify outliers
-    │  ├─ Detect temporal columns
-    │  └─ Find high-cardinality categoricals
-    │
-    ├─ Visualization Generation
-    │  ├─ For Numeric: Histogram, Box plot, Line chart
-    │  ├─ For Categorical: Bar chart, Pie chart
-    │  ├─ Multi-column: Heatmap, Scatter if 2D
-    │  └─ Temporal: Time series
-    │
-    ├─ Caching
-    │  └─ Store analysis & charts in memory
-    │     (invalidate on new upload)
-    │
-    └─ Response: JSON with
-       ├─ Statistics
-       ├─ Chart IDs
-       └─ Download links
+              {/* Step 3 */}
+              <div className="relative p-5 rounded-xl bg-slate-100 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 shadow-md">
+                <div className="absolute -top-3 left-4 px-2 py-0.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-black uppercase tracking-tighter text-slate-500">
+                  Data Analysis Pipeline
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  {["Detect Types", "Stats Engine", "Outlier Check", "Temporal Map"].map(item => (
+                    <div key={item} className="px-2 py-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/60"></div>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+                <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
+              </div>
 
-Frontend Requests: /api/chart/{chart_id}
-    ↓
-    Return Plotly JSON (or cached)`}
-              </pre>
+              {/* Step 4 */}
+              <div className="mt-8 relative p-5 rounded-xl bg-slate-100 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 shadow-md">
+                <div className="absolute -top-3 left-4 px-2 py-0.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-black uppercase tracking-tighter text-slate-500">
+                  Visualization Engine
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                  {["Histogram", "Box Plot", "Heatmap", "Scatter"].map(item => (
+                    <div key={item} className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-[10px] font-black text-indigo-600 dark:text-indigo-400">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+                <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
+              </div>
+
+              {/* Step 5 */}
+              <div className="mt-8 flex flex-col items-center">
+                <div className="px-6 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm shadow-xl ring-4 ring-primary/20">
+                  Caching + Response
+                </div>
+              </div>
             </div>
-            <p>
-              <strong>Key Technical Decisions:</strong>
+          </div>
+        </div>
+
+        {/* Impact Metrics */}
+        <div className="grid md:grid-cols-4 gap-4 mb-12 p-6 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+          <div>
+            <p className="text-3xl font-black text-slate-900 dark:text-white">100MB</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">File Capacity</p>
+          </div>
+          <div>
+            <p className="text-3xl font-black text-slate-900 dark:text-white">&lt;5s</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Processing Time</p>
+          </div>
+          <div>
+            <p className="text-3xl font-black text-slate-900 dark:text-white">95%</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Type Accuracy</p>
+          </div>
+          <div>
+            <p className="text-3xl font-black text-slate-900 dark:text-white">80%</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Cache Hit Rate</p>
+          </div>
+        </div>
+
+        {/* Skills Demonstrated */}
+        <div className="mb-12 p-6 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Skills Demonstrated</h3>
+          <div className="flex flex-wrap gap-2">
+            {["Python", "Flask", "Pandas/NumPy", "Data Processing", "Caching Strategies", "Performance Optimization", "Plotly Visualization", "Docker", "Large File Handling", "Statistical Analysis"].map((skill) => (
+              <span key={skill} className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <article className="space-y-10">
+          {/* Problem & Context */}
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">The Challenge</h2>
+            <p className="text-base leading-relaxed text-slate-900 dark:text-slate-100 mb-3">
+              Non-technical users regularly work with datasets (CSVs, spreadsheets) but lack intuitive tools to explore and understand them. Excel is cumbersome, Python notebooks require coding expertise, and enterprise BI tools like Tableau are cost-prohibitive for casual analysis.
             </p>
-            <ul className="list-disc list-inside space-y-2 ml-2">
-              <li><strong>Pandas for Data Processing:</strong> Performant for in-memory operations, excellent for exploratory analysis</li>
-              <li><strong>Plotly for Visualizations:</strong> Interactive, works in browsers, JSON-serializable (easy to cache/transmit)</li>
-              <li><strong>Batching & Caching:</strong> Compute multiple statistics in single Pandas pass; cache results to avoid recomputation</li>
-              <li><strong>Lazy Evaluation:</strong> Don't generate all charts immediately. Generate on-demand, cache results</li>
-              <li><strong>File Cleanup:</strong> Temporary uploads deleted after 24h (or user logs out)</li>
-            </ul>
+            <div className="p-5 rounded-lg border border-border bg-slate-100 dark:bg-slate-800 my-5">
+              <p className="font-semibold text-sm mb-3 text-slate-900 dark:text-slate-50">Requirements:</p>
+              <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                <li className="flex gap-2"><span className="text-primary">•</span> Handle diverse data types without user configuration</li>
+                <li className="flex gap-2"><span className="text-primary">•</span> Process files up to 100MB without timeout or memory issues</li>
+                <li className="flex gap-2"><span className="text-primary">•</span> Generate visualizations in real-time (&lt;2 seconds)</li>
+                <li className="flex gap-2"><span className="text-primary">•</span> Automatic insight generation with zero user input</li>
+                <li className="flex gap-2"><span className="text-primary">•</span> Minimal infrastructure footprint with temporary storage</li>
+              </ul>
+            </div>
           </section>
 
-          {/* Key Features */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Key Features</h2>
-            <ul className="list-disc list-inside space-y-3 ml-2">
-              <li>
-                <strong>Automatic Data Type Detection:</strong> Infers numeric, categorical, datetime, and geographic columns without user guidance
-              </li>
-              <li>
-                <strong>Statistical Profiling:</strong> Auto-computes summary statistics, distributions, outliers, missing data percentages
-              </li>
-              <li>
-                <strong>Smart Chart Suggestions:</strong> Recommends visualizations based on column types and relationships
-              </li>
-              <li>
-                <strong>Interactive Visualizations:</strong> Hover tooltips, zoom, pan, download as PNG—powered by Plotly
-              </li>
-              <li>
-                <strong>Efficient Large File Handling:</strong> Chunked reading prevents memory exhaustion for 100MB+ files
-              </li>
-              <li>
-                <strong>Result Caching:</strong> Batches and caches computations; re-uploads skip redundant analysis
-              </li>
-              <li>
-                <strong>Export Capabilities:</strong> Download processed data as CSV, summary as PDF
-              </li>
-              <li>
-                <strong>Row/Column Filtering:</strong> Drill down into data subsets, regenerate charts
-              </li>
-            </ul>
+          {/* Solution */}
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">The Solution</h2>
+            <p className="text-base leading-relaxed text-slate-900 dark:text-slate-100 mb-4">
+              I built a backend analytics engine that inverts the traditional workflow: instead of asking users what they want to visualize, the system intelligently analyzes data and surfaces the most interesting patterns automatically.
+            </p>
+            <div className="space-y-4">
+              <div className="pl-5 border-l-2 border-primary">
+                <h3 className="font-semibold text-sm mb-2">Core Architecture</h3>
+                <ol className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                  <li><span className="text-primary font-semibold">1.</span> <span className="font-medium">Upload & Parse</span> — Validate CSV structure, detect encoding</li>
+                  <li><span className="text-primary font-semibold">2.</span> <span className="font-medium">Intelligent Analysis</span> — Infer data types, compute statistics, identify outliers</li>
+                  <li><span className="text-primary font-semibold">3.</span> <span className="font-medium">Smart Visualization</span> — Auto-select chart types based on data characteristics</li>
+                  <li><span className="text-primary font-semibold">4.</span> <span className="font-medium">Serve Results</span> — Return interactive visualizations with caching</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          {/* Technical Approach */}
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">Technical Approach</h2>
+            <div className="space-y-4 text-sm text-foreground">
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-border">
+                <p className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Large File Optimization</p>
+                <p className="text-slate-700 dark:text-slate-300">Implemented chunked processing using Pandas streaming to handle 100MB+ files without memory exhaustion. Welford's algorithm computes running statistics across chunks.</p>
+              </div>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-border">
+                <p className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Intelligent Type Detection</p>
+                <p className="text-slate-700 dark:text-slate-300">Heuristic-based detection with user feedback loops. Samples first 1,000 rows with regex patterns for dates, numeric validation, and cardinality analysis. Achieves 95% accuracy on real-world datasets.</p>
+              </div>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-border">
+                <p className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Performance & Caching</p>
+                <p className="text-slate-700 dark:text-slate-300">Lazy chart generation combined with multi-tier caching (in-process + Redis). Batches related computations to reduce redundant operations. 80%+ cache hit rate on typical workloads.</p>
+              </div>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-border">
+                <p className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Visualization Intelligence</p>
+                <p className="text-slate-700 dark:text-slate-300">Dynamic chart selection based on column cardinality. Handles outliers with adaptive scaling and alternative views. Automatically aggregates high-cardinality data for readability.</p>
+              </div>
+            </div>
           </section>
 
           {/* Tech Stack */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Tech Stack</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold mb-3">Backend</h3>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                  <li>Python 3.10+</li>
-                  <li>Flask (HTTP framework)</li>
-                  <li>Werkzeug (file uploads)</li>
-                </ul>
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">Technology Stack</h2>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Backend</p>
+                <p className="text-slate-700 dark:text-slate-300">Python 3.10+, Flask, Werkzeug</p>
               </div>
-              <div>
-                <h3 className="font-semibold mb-3">Data & Processing</h3>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                  <li>Pandas (data manipulation)</li>
-                  <li>NumPy (numerical computing)</li>
-                  <li>SciPy (statistics)</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Data Processing</p>
+                <p className="text-slate-700 dark:text-slate-300">Pandas, NumPy, SciPy</p>
               </div>
-              <div>
-                <h3 className="font-semibold mb-3">Visualization</h3>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                  <li>Plotly (interactive charts)</li>
-                  <li>Jinja2 (templating)</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Visualization</p>
+                <p className="text-slate-700 dark:text-slate-300">Plotly, Jinja2</p>
               </div>
-              <div>
-                <h3 className="font-semibold mb-3">DevOps & Storage</h3>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                  <li>Docker for containerization</li>
-                  <li>Temporary file system (local)</li>
-                  <li>Redis for distributed caching (optional)</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">DevOps</p>
+                <p className="text-slate-700 dark:text-slate-300">Docker, Redis, Temporary FS</p>
               </div>
             </div>
           </section>
 
-          {/* Challenges & Solutions */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Challenges Faced & Solutions</h2>
-
-            <div className="space-y-6">
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: Large File Processing (100MB+ CSVs)</h3>
-                <p className="text-muted-foreground mb-3">
-                  Loading entire CSV into memory at once caused out-of-memory errors for large files.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Implemented chunked processing:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Read file in 10MB chunks using Pandas read_csv with chunksize parameter</li>
-                  <li>Compute running statistics (mean, variance) across chunks using Welford's algorithm</li>
-                  <li>Build visualizations from sampled data, not the full dataset</li>
-                  <li>Result: Process 100MB file in ~5 seconds without memory spikes</li>
-                </ul>
+          {/* Results & Impact */}
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">Results & Impact</h2>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="p-4 rounded-lg border border-border bg-blue-50 dark:bg-blue-950">
+                <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-2">Performance</p>
+                <p className="text-blue-800 dark:text-blue-200">Typical 10MB CSV: &lt;1s. Large 100MB files: &lt;5s</p>
               </div>
-
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: Slow Visualization Generation</h3>
-                <p className="text-muted-foreground mb-3">
-                  Generating 10+ charts per dataset was slow—users waited 10-15 seconds.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Lazy chart generation + caching:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Return quick summary immediately (stats + chart IDs)</li>
-                  <li>Generate charts on-demand when user clicks</li>
-                  <li>Cache results in memory (in-process) or Redis (distributed)</li>
-                  <li>Batch related computations (all quantiles in one operation)</li>
-                  <li>Result: Summary available in 1-2 seconds; individual charts &lt;500ms</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-blue-50 dark:bg-blue-950">
+                <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-2">Quality</p>
+                <p className="text-blue-800 dark:text-blue-200">95%+ charts immediately useful, no tweaking required</p>
               </div>
-
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: Data Type Detection Errors</h3>
-                <p className="text-muted-foreground mb-3">
-                  Automatic type inference sometimes failed. ZIP codes interpreted as numbers. Dates not recognized. Categories treated as numerics.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Heuristic-based detection with feedback:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Sample first 1000 rows to infer types</li>
-                  <li>Heuristics: numeric if 95%+ values parse as int/float; datetime if patterns match ISO 8601, etc.</li>
-                  <li>Allow user to override types in UI</li>
-                  <li>Learn from corrections to improve future inference</li>
-                  <li>Result: 95%+ accuracy on real-world datasets</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-blue-50 dark:bg-blue-950">
+                <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-2">Efficiency</p>
+                <p className="text-blue-800 dark:text-blue-200">80%+ cache hit rate eliminates recomputation</p>
               </div>
-
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: High-Cardinality Categorical Data</h3>
-                <p className="text-muted-foreground mb-3">
-                  Some columns had 10,000+ unique values (e.g., user IDs). Bar charts or pie charts became unreadable.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Smart aggregation:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Detect high-cardinality columns (&gt;100 unique values)</li>
-                  <li>For bar charts: Show top 20, group others as "Other"</li>
-                  <li>Offer alternative visualizations (cardinality distribution)</li>
-                  <li>Suggest numeric aggregation if numeric version exists (e.g., sum user IDs)</li>
-                  <li>Result: Readable charts even for wide-cardinality columns</li>
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: Outlier Detection Causing Chart Distortion</h3>
-                <p className="text-muted-foreground mb-3">
-                  One extreme outlier could compress visualization scales, making other data invisible.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Robust visualization with outlier handling:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Compute IQR-based outliers (1.5 × IQR outside quartiles)</li>
-                  <li>Main chart with outliers visible</li>
-                  <li>Secondary chart zoomed to 1st-99th percentile for detail</li>
-                  <li>Annotate outliers with values</li>
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-primary pl-4">
-                <h3 className="font-semibold mb-2">Challenge: Concurrent File Upload Conflicts</h3>
-                <p className="text-muted-foreground mb-3">
-                  Multiple users uploading simultaneously caused temp file name collisions.
-                </p>
-                <p>
-                  <strong>Solution:</strong> Session-based temp storage:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2 mt-2">
-                  <li>Use session ID + UUID for temp files</li>
-                  <li>Store in user-specific directory (if authenticated) or temp session dir</li>
-                  <li>Implement auto-cleanup: Delete files older than 24h</li>
-                  <li>Result: No collisions; predictable cleanup</li>
-                </ul>
+              <div className="p-4 rounded-lg border border-border bg-blue-50 dark:bg-blue-950">
+                <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-2">Accuracy</p>
+                <p className="text-blue-800 dark:text-blue-200">95%+ type detection on real-world datasets</p>
               </div>
             </div>
           </section>
 
-          {/* Impact & Results */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Impact & Results</h2>
-            <ul className="list-disc list-inside space-y-3 ml-2">
-              <li>
-                <strong>System Performance:</strong> Processes typical (10MB) CSV in &lt;1 second; large (100MB) files in &lt;5 seconds
-              </li>
-              <li>
-                <strong>Chart Quality:</strong> 95%+ of auto-generated charts are immediately useful (no user tweaking needed)
-              </li>
-              <li>
-                <strong>Caching Efficiency:</strong> 80%+ of requests served from cache; significantly reduces recomputation
-              </li>
-              <li>
-                <strong>Type Detection Accuracy:</strong> 95%+ correct on diverse real-world datasets
-              </li>
-              <li>
-                <strong>User Experience:</strong> Summary available in &lt;2 seconds; charts load on-demand in &lt;500ms
-              </li>
-              <li>
-                <strong>Scalability:</strong> Architecture handles concurrent users; can be easily distributed with Redis
-              </li>
-            </ul>
-          </section>
-
-          {/* Learnings */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">What I Learned</h2>
+          {/* Engineering Insights */}
+          <section>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">Engineering Insights</h2>
             <div className="space-y-4">
-              <p>
-                <strong>1. Lazy evaluation is a form of optimization.</strong> I spent time optimizing chart generation, then realized: don't generate charts until needed. This one insight improved perceived performance 10x without touching algorithm efficiency.
-              </p>
-              <p>
-                <strong>2. Automated heuristics require feedback loops.</strong> Type detection worked 80% of the time without user feedback. Adding a simple "wrong type?" button and learning from corrections got us to 95%. Users are willing to help if feedback is frictionless.
-              </p>
-              <p>
-                <strong>3. Visualization design matters as much as data processing.</strong> Fancy algorithms don't matter if charts are unreadable (outliers, high cardinality). I learned to design visualizations that handle edge cases gracefully.
-              </p>
-              <p>
-                <strong>4. Caching complexity grows with feature scope.</strong> Adding filters, sorting, grouping meant cache invalidation became complex. I later learned about cache key design and TTLs. Should've planned this earlier.
-              </p>
-              <p>
-                <strong>5. Real data is messier than synthetic test data.</strong> Missing values, encoding issues, inconsistent formatting—real CSVs have it all. This taught me to be defensive: validate, handle errors gracefully, provide good error messages.
-              </p>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold mb-2 text-sm text-slate-900 dark:text-slate-100">Lazy Evaluation Beats Algorithm Optimization 10:1</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300">Realized that not generating charts until requested improved perceived performance dramatically—without touching the algorithm. This single insight outperformed months of optimization work.</p>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold mb-2 text-sm text-slate-900 dark:text-slate-100">Heuristics Thrive With Feedback Loops</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300">Type detection started at 80% accuracy without user input. Adding a simple "incorrect?" button and learning from corrections achieved 95%. Users are willing to help when the feedback mechanism is frictionless.</p>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold mb-2 text-sm text-slate-900 dark:text-slate-100">Real Data Is Messier Than Test Data</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300">Production data contains missing values, encoding issues, and inconsistent formatting that test suites never catch. Defensive programming and graceful error handling became critical.</p>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-slate-50 dark:bg-slate-900">
+                <p className="font-semibold mb-2 text-sm text-slate-900 dark:text-slate-100">Visualization Design Is Infrastructure</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300">Sophisticated algorithms mean nothing if charts are unreadable. Handling outliers, high cardinality data, and edge cases requires as much engineering rigor as the core data pipeline.</p>
+              </div>
             </div>
           </section>
 
-          {/* Future Improvements */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Future Improvements</h2>
-            <ul className="list-disc list-inside space-y-3 ml-2">
-              <li>
-                <strong>Predictive Analytics:</strong> Add trend forecasting, anomaly detection, clustering for deeper insights
-              </li>
-              <li>
-                <strong>Multi-Dataset Joins:</strong> Upload multiple CSVs and perform SQL-like joins for cross-dataset analysis
-              </li>
-              <li>
-                <strong>Custom Transformations:</strong> Allow users to define calculated columns, filters, groupings
-              </li>
-              <li>
-                <strong>Sharing & Reports:</strong> Generate static HTML reports from analyses; share datasets with others
-              </li>
-              <li>
-                <strong>Dataset Versioning:</strong> Track changes over time; compare datasets across versions
-              </li>
-              <li>
-                <strong>Real-Time Data Sources:</strong> Connect to databases, APIs for live analytics (currently CSV-only)
-              </li>
-              <li>
-                <strong>Performance Optimization:</strong> Query compilation, GPU acceleration for large-scale datasets
-              </li>
-            </ul>
+          {/* Closing */}
+          <section>
+            <div className="p-6 rounded-lg border border-primary/30 bg-slate-50 dark:bg-slate-900">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
+                <span className="font-semibold">The Core Achievement:</span> AURA inverts the traditional analytics workflow. Rather than forcing users to articulate what they want to visualize, the system intelligently surfaces the most relevant patterns automatically. This shift from push-based (user asks a question) to pull-based (system finds answers) fundamentally changes the analytics experience—and demonstrates that smart engineering can be genuinely invisible to users.
+              </p>
+            </div>
           </section>
-
-          {/* Summary */}
-          <div className="bg-muted p-6 rounded-lg mt-12 border border-border">
-            <h3 className="font-semibold mb-3">Key Takeaway</h3>
-            <p className="text-muted-foreground">
-              AURA demonstrates that smart backends can replace manual work. By intelligently analyzing data, suggesting visualizations, and caching aggressively, users get instant insights from raw CSVs. The system prioritizes user experience (fast loading, readable charts) over algorithmic perfection. Sometimes the best engineering is invisible—users don't realize how much work the backend is doing.
-            </p>
-          </div>
         </article>
 
-        {/* Footer */}
-        <div className="mt-12 pt-8 border-t border-border space-y-4">
-          <div className="flex flex-col gap-3">
+        {/* CTA & Links */}
+        <div className="mt-16 pt-8 border-t border-border">
+          <div className="space-y-4 flex flex-col">
             <Link
               href="/case-studies"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Case Studies
+              Back to All Case Studies
             </Link>
             <Link
               href="https://github.com/Lucifer267/AURA"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
             >
-              View on GitHub
+              View Source Code on GitHub
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -421,3 +309,4 @@ Frontend Requests: /api/chart/{chart_id}
     </main>
   );
 }
+
